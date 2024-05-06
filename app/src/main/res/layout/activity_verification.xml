@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Session2.SignInActivity">
+
+    <ImageButton
+        android:id="@+id/backIBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_background"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/back_arrow"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/greyMain"
+        android:text="OTP проверка"
+        android:textSize="32sp"
+        android:fontFamily="@font/raleway_bold"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="49dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/greyBottom"
+        android:text="Пожалуйста, проверьте свою электронную почту, чтобы увидеть код подтверждения"
+        android:textSize="16sp"
+        android:lineHeight="24dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="42dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/greyMain"
+            android:text="OTP Код"
+            android:textSize="21sp"
+            android:fontFamily="@font/raleway_semibold"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="4"
+        android:layout_marginHorizontal="15dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/otp1"
+            android:layout_marginTop="12dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:maxLength="1"
+            android:layout_height="56dp"
+            android:background="@drawable/edit_text_background"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:hint="1"
+            android:textAlignment="center"
+            android:textColorHint="@color/editText"/>
+
+        <EditText
+            android:id="@+id/otp2"
+            android:layout_marginLeft="15dp"
+            android:maxLength="1"
+
+            android:layout_marginTop="12dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="56dp"
+            android:background="@drawable/edit_text_background"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:hint="1"
+            android:textAlignment="center"
+            android:textColorHint="@color/editText"/>
+
+        <EditText
+            android:id="@+id/otp3"
+            android:layout_marginLeft="15dp"
+            android:maxLength="1"
+
+            android:layout_marginTop="12dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="56dp"
+            android:background="@drawable/edit_text_background"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:hint="1"
+            android:textAlignment="center"
+            android:textColorHint="@color/editText"/>
+
+        <EditText
+            android:id="@+id/otp4"
+            android:layout_marginLeft="15dp"
+            android:maxLength="1"
+
+            android:layout_marginTop="12dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="56dp"
+            android:background="@drawable/edit_text_background"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:hint="1"
+            android:textAlignment="center"
+            android:textColorHint="@color/editText"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/sendAgainTXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/greyBottom"
+            android:text="Отправить заново"
+            android:textSize="12sp"
+            android:fontFamily="@font/raleway_regular"
+            />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/greyBottom"
+            android:text="00:30"
+            android:textSize="12sp"
+            android:fontFamily="@font/raleway_regular"
+            />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
