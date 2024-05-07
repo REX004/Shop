@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.shop.databinding.ActivitySignInBinding
 import com.example.shop.session3.BottomNavigationActivity
+import com.example.shop.session3.HomeActivity
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.annotations.SupabaseInternal
 import io.github.jan.supabase.createSupabaseClient
@@ -48,45 +49,38 @@ class SignInActivity : AppCompatActivity() {
             }
         }
 
+
         binding.restoreTXT.setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
 
         binding.logBT.setOnClickListener {
-            try {
-                val emailEntered = binding.emailET.text.toString()
-                val passwordEntered = binding.passwordET.text.toString()
+            val email = binding.emailET.text.toString()
+            val password = binding.passwordET.text.toString()
 
-                if (emailEntered.isEmpty() || passwordEntered.isEmpty()) {
-                    Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
-                } else {
-                    lifecycleScope.launch {
-                        try {
-                            val result = supabase.auth.signInWith(Email) {
-                                email = emailEntered
-                                password = passwordEntered
-                            }
-                            val user = result.hashCode()
-                            if (user != null) {
-                                // Sign-in successful, navigate to next screen
-                                startActivity(Intent(this@SignInActivity, BottomNavigationActivity::class.java))
-                            } else {
-                                // Sign-in failed, show error message
-                                Toast.makeText(this@SignInActivity, "Error: ${result.hashCode()?.dec()}", Toast.LENGTH_SHORT).show()
-                            }
-                        } catch (e: Exception) {
-                            // Handle other exceptions
-                            runOnUiThread {
-                                Toast.makeText(this@SignInActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                            }
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+
+                lifecycleScope.launch {
+                    try {
+                        val result = supabase.auth.signInWith(Email) {
+                            this.email = email
+                            this.password = password
                         }
+
+                        Toast.makeText(this@SignInActivity, "Sign in successful", Toast.LENGTH_SHORT).show()
+
+                        startActivity(Intent(this@SignInActivity, HomeActivity::class.java))
+                    } catch (e: HttpRequestException) {
+
+                        Toast.makeText(this@SignInActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+
+                        Toast.makeText(this@SignInActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
-            } catch (e : HttpRequestException){
-                runOnUiThread {
-                    Log.e("Supabase", "${e.message}")
-                    Toast.makeText(this@SignInActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+            } else {
+
+                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
         }
 

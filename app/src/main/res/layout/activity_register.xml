@@ -168,7 +168,7 @@
         android:layout_marginHorizontal="42dp"
         android:background="@drawable/edit_text_background"
         app:backgroundTint="@color/blue"
-        android:text="Войти"
+        android:text="Зарегистрироватеься"
         style="@style/Platform.MaterialComponents"
         android:fontFamily="@font/raleway_semibold"
         android:textSize="14sp"/>

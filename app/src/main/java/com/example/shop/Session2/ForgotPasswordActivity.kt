@@ -20,6 +20,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.OtpType
 import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.providers.builtin.OTP
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.storage.Storage
@@ -59,17 +60,16 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 delay(3000)
                 intent.putExtra("email", binding.emailET.text.toString())
                 try {
+                    val email = binding.emailET.text.toString()
                     lifecycleScope.launch {
-                        supabase.auth.resendEmail(
-                            type = OtpType.Email.EMAIL_CHANGE,
-                            email = binding.emailET.text.toString()
-                        )
+//                        supabase.auth.resetPasswordForEmail(email)
                     }
                 } catch (e: Exception){
                     Toast.makeText(this@ForgotPasswordActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
 
                 startActivity(Intent(this@ForgotPasswordActivity, VerificationActivity::class.java))
+                finish()
             }
         }
 

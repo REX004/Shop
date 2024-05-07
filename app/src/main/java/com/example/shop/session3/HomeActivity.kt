@@ -1,43 +1,41 @@
-package com.example.shop.Session2
+package com.example.shop.session3
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.shop.databinding.ActivityRegisterBinding
-import com.example.shop.session3.HomeActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shop.databinding.HomeActivtyBinding
+import com.example.shop.session3.adapter.CartAdapter
+import com.example.shop.session3.data.Cart
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.annotations.SupabaseInternal
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
-import io.github.jan.supabase.gotrue.auth
-import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.storage.Storage
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 
-class RegisterActivity : AppCompatActivity() {
-
+class HomeActivity : AppCompatActivity() {
+    private lateinit var binding: HomeActivtyBinding
+    private lateinit var adapter: CartAdapter
     private val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
     private val supabaseKey =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
 
     private lateinit var supabase: SupabaseClient
-    private lateinit var binding: ActivityRegisterBinding
-
     @OptIn(SupabaseInternal::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        binding = HomeActivtyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize Supabase client and auth
+
+
         supabase = createSupabaseClient(supabaseUrl = supabaseUrl, supabaseKey = supabaseKey) {
             install(Auth)
             install(Realtime)
@@ -48,27 +46,14 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        binding.logBT.setOnClickListener {
-            val emailEntered = binding.emailET.text.toString()
-            val passwordEntered = binding.passwordET.text.toString()
-
-            if (emailEntered.isEmpty() || passwordEntered.isEmpty()) {
-                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
-            } else {
-                lifecycleScope.launch {
-                    supabase.auth.signUpWith(Email) {
-                        email = emailEntered
-                        password = passwordEntered
-
-                    }
-                }
-                startActivity(Intent(this, HomeActivity::class.java))
-            }
+        lifecycleScope.launch {
+            val city = supabase.from("productd").select().decodeList<Cart>()
+            Log.e("HomeActivity","Data loaded")
+            val adapter = CartAdapter(this@HomeActivity, city)
+            binding.cartRV.adapter = adapter
+            binding.cartRV.layoutManager = LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
         }
 
-        binding.logTXT.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
-        }
+
     }
 }

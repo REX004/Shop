@@ -10,9 +10,7 @@ import com.example.shop.R
 import com.example.shop.session1.fragments.Screen1Fragment
 import com.example.shop.session1.fragments.Screen2Fragment
 import com.example.shop.session1.fragments.Screen3Fragment
-
 class OnBoardingAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
-
 
     override fun getItem(position: Int): Fragment {
         return when (position) {

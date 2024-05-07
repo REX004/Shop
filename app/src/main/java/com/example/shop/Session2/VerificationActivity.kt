@@ -33,9 +33,9 @@ class VerificationActivity : AppCompatActivity() {
         binding = ActivityVerificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val supabaseUrl = "https://taiveobdxmijvagwftuv.supabase.co"
+        val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
         val supabaseKey =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRhaXZlb2JkeG1panZhZ3dmdHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY2OTEzOTMsImV4cCI6MjAyMjI2NzM5M30.CtF3QuD7OMEX1VgbBq4pqXbOMkrUt2jIxz6yOQ-6yt0"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
 
         // todo создание supabase клиента
         supabase = createSupabaseClient(supabaseUrl = supabaseUrl, supabaseKey = supabaseKey) {
@@ -47,14 +47,14 @@ class VerificationActivity : AppCompatActivity() {
                 Logging { this.level = LogLevel.BODY }
             }
         }
-        val emailET = intent.getStringExtra("email")
-        if (emailET != null) {
-            lifecycleScope.launch {
-                supabase.auth.resendEmail(OtpType.Email.SIGNUP, emailET)
-
-            }
-
-        }
+//        val emailET = intent.getStringExtra("email")
+//        if (emailET != null) {
+//            lifecycleScope.launch {
+//                supabase.auth.resendEmail(OtpType.Email.SIGNUP, emailET)
+//
+//            }
+//
+//        }
 
     }
     private fun otpCheck() {

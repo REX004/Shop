@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("plugin.serialization") version "1.9.22"
+
 }
 
 android {
@@ -61,6 +63,7 @@ dependencies {
 
     implementation ("com.google.android.gms:play-services-maps:17.0.1")
 
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
