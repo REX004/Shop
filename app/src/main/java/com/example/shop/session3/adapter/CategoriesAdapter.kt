@@ -1,36 +1,47 @@
 package com.example.shop.session3.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.shop.R
+import com.example.shop.databinding.ItemCartBinding
+import com.example.shop.session3.data.Cart
+import com.bumptech.glide.Glide
 import com.example.shop.databinding.ItemCategoriesBinding
-import com.google.android.material.card.MaterialCardView
 
 
-class CategoriesAdapter(private val items: List<String>) :
-    RecyclerView.Adapter<CategoriesAdapter.MyViewHolder>() {
-        private lateinit var binding: ItemCategoriesBinding
+class CategoriesAdapter(private val context: Context, private val carts: List<Cart>) :
+    RecyclerView.Adapter<CategoriesAdapter.CartViewHolder>() {
 
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val uniqueCategories = HashSet<String>()
 
-        val textView: TextView = itemView.findViewById(R.id.name)
+    init {
+        for (cart in carts) {
+            uniqueCategories.add(cart.category)
+        }
+    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
+        val binding = ItemCategoriesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CartViewHolder(binding)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_categories, parent, false)
-        return MyViewHolder(view)
+    override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
+        val category = uniqueCategories.elementAt(position)
+        val cart = carts.find { it.category == category }
+        cart?.let { holder.bind(it) }
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item = items[position]
-        holder.textView.text = item
-    }
+    override fun getItemCount(): Int = uniqueCategories.size
 
-    override fun getItemCount(): Int {
-        return items.size
+    inner class CartViewHolder(private val binding: ItemCategoriesBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(cart: Cart) {
+            with(binding) {
+
+                name.text = cart.category
+            }
+
+        }
     }
 }
-

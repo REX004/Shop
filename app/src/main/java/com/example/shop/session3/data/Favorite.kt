@@ -8,8 +8,9 @@ import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonPrimitive
 
 @Serializable
-data class Cart(
+data class Favorite(
     val id: Int? = null,
+    val user_id : String,
     val name: String,
     val price: String,
     val information: String,
@@ -18,9 +19,10 @@ data class Cart(
     val category: String
 ) {
     companion object {
-        fun fromJson(jsonObject: JsonObject): Cart {
-            return Cart(
+        fun fromJson(jsonObject: JsonObject): Favorite {
+            return Favorite(
                 id = jsonObject["id"]?.jsonPrimitive?.intOrNull,
+                user_id = jsonObject["user_id"]?.jsonPrimitive?.contentOrNull ?: "",
                 name = jsonObject["name"]?.jsonPrimitive?.contentOrNull ?: "",
                 price = jsonObject["price"]?.jsonPrimitive?.contentOrNull ?: "",
                 information = jsonObject["information"]?.jsonPrimitive?.contentOrNull ?: "",
