@@ -1,10 +1,10 @@
 package com.example.shop.session3.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -18,11 +18,12 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.storage.Storage
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
-import kotlinx.coroutines.Dispatchers
+import io.ktor.util.Identity.decode
 import kotlinx.coroutines.launch
 
 
@@ -32,6 +33,7 @@ class CartAdapter(private val context: Context, private val lifecycleOwner: Life
     private val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
     private val supabaseKey =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
+
 
     private lateinit var supabase: SupabaseClient
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
@@ -55,34 +57,63 @@ class CartAdapter(private val context: Context, private val lifecycleOwner: Life
 
                 name.text = cart.name
                 price.text = cart.price
-//                supabase = createSupabaseClient(supabaseUrl = supabaseUrl, supabaseKey = supabaseKey) {
-//                    install(Auth)
-//                    install(Realtime)
-//                    install(Storage)
-//                    install(Postgrest)
-//                    httpConfig {
-//                        Logging { this.level = LogLevel.BODY }
-//                    }
-//                }
-//
-//
-//
-//                addfavouriteIMG.setOnClickListener {
-//                    lifecycleOwner.lifecycleScope.launch {
-//
-//                        val cat = Favorite(
-//                            id = null,
-//                            user_id = userId,
-//                            picture = cart.picture,
-//                            price = cart.price,
-//                            information = cart.information,
-//                            gender = cart.gender,
-//                            category = cart.category,
-//                            name = cart.name
-//                        )
-//                        supabase.from("cats").insert(cat)
-//                    }
-//                }
+
+                Glide.with(context)
+                    .load(cart.picture)
+                    .into(binding.crossIMG)
+                supabase = createSupabaseClient(supabaseUrl = supabaseUrl, supabaseKey = supabaseKey) {
+                    install(Auth)
+                    install(Realtime)
+                    install(Storage)
+                    install(Postgrest)
+                    httpConfig {
+                        Logging { this.level = LogLevel.BODY }
+                    }
+                }
+
+
+
+                addfavouriteIMG.setOnClickListener {
+                    lifecycleOwner.lifecycleScope.launch {
+
+                        val existingFavorites = try {
+                            supabase.from("favorites").select(columns = Columns.list("id")){
+                                filter {
+                                    eq("user_id", userId)
+                                    eq("picture", cart.picture)
+                                }
+                            }.decodeList<Favorite>()
+                        } catch (e: Exception){
+                            e.printStackTrace()
+                            emptyList<Favorite>()
+                        }
+                        if (existingFavorites.isEmpty()){
+                            val favorites = Favorite(
+                                id = (10..1000).random(),
+                                user_id = userId,
+                                picture = cart.picture,
+                                price = cart.price,
+                                information = cart.information,
+                                gender = cart.gender,
+                                category = cart.category,
+                                name = cart.name
+                            )
+                            try {
+                                supabase.from("favorites")
+                                    .insert(favorites)
+
+                                Log.e("CartDAPTER", "INFORMATION LOAD")
+
+                            } catch (e: Exception){
+                                e.printStackTrace()
+                                Log.e("CartDAPTER", "INFORMATION LOAD FAILED")
+                            }
+                        }
+
+
+
+                    }
+                }
             }
         }
 
