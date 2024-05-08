@@ -7,7 +7,7 @@ import kotlinx.serialization.json.jsonPrimitive
 
 @Serializable
 data class Favorite(
-    val id: Int,
+    val id: Int?,
     val user_id: String,
     val name: String,
     val price: String,

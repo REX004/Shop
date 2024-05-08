@@ -89,7 +89,7 @@ class CartAdapter(private val context: Context, private val lifecycleOwner: Life
                         }
                         if (existingFavorites.isEmpty()){
                             val favorites = Favorite(
-                                id = (10..1000).random(),
+                                id = null,
                                 user_id = userId,
                                 picture = cart.picture,
                                 price = cart.price,
