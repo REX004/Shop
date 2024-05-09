@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".session3.data.FavoritesCartActivity"
+            android:name=".session3.FavoritesCartActivity"
             android:exported="false" />
         <activity
             android:name=".session3.BottomNavigationActivity"
@@ -39,7 +39,9 @@
         <!-- android:exported="false" /> -->
         <activity
             android:name=".session1.OnBoardingActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".session3.HomeActivity"
             android:exported="true">

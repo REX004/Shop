@@ -35,6 +35,7 @@ class CartAdapter(private val context: Context, private val lifecycleOwner: Life
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
 
 
+    var count = 1
     private lateinit var supabase: SupabaseClient
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val binding = ItemCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -87,7 +88,25 @@ class CartAdapter(private val context: Context, private val lifecycleOwner: Life
                             e.printStackTrace()
                             emptyList<Favorite>()
                         }
-                        if (existingFavorites.isEmpty()){
+                        if (existingFavorites.isNotEmpty()){
+                            try {
+                                supabase.from("favorites")
+                                    .delete {
+                                        filter {
+                                            eq("id", existingFavorites.first().id!!)
+                                            eq("user_id", userId)
+                                        }
+                                    }
+                                Log.e("CartDAPTER", "INFORMATION DELETED")
+                            } catch (e: Exception){
+                                e.printStackTrace()
+                                Log.e("CartDAPTER", "INFORMATION DELETED FAIL")
+
+                            }
+
+
+                        }
+                        else {
                             val favorites = Favorite(
                                 id = null,
                                 user_id = userId,
@@ -106,9 +125,54 @@ class CartAdapter(private val context: Context, private val lifecycleOwner: Life
 
                             } catch (e: Exception){
                                 e.printStackTrace()
-                                Log.e("CartDAPTER", "INFORMATION LOAD FAILED")
+                                Log.e("CartDAPTER", "INFORMATION LOAD FAILED: ${e.message}")
                             }
                         }
+
+
+
+
+                    }
+                }
+
+                plusIMG.setOnClickListener {
+                    lifecycleOwner.lifecycleScope.launch {
+
+                        val existingFavorites = try {
+                            supabase.from("busket").select(columns = Columns.list("id")){
+                                filter {
+                                    eq("user_id", userId)
+                                    eq("picture", cart.picture)
+                                }
+                            }.decodeList<Favorite>()
+                        } catch (e: Exception){
+                            e.printStackTrace()
+                            emptyList<Favorite>()
+                        }
+                        if (existingFavorites.isEmpty()) {
+                            val favorites = Favorite(
+                                id = count,
+                                user_id = userId,
+                                picture = cart.picture,
+                                price = cart.price,
+                                information = cart.information,
+                                gender = cart.gender,
+                                category = cart.category,
+                                name = cart.name
+                            )
+                            count += 1
+                            try {
+                                supabase.from("busket")
+                                    .insert(favorites)
+
+                                Log.e("CartDAPTER", "INFORMATION LOAD")
+
+                            } catch (e: Exception){
+                                e.printStackTrace()
+                                Log.e("CartDAPTER", "INFORMATION LOAD FAILED: ${e.message}")
+                            }
+                        }
+
 
 
 
