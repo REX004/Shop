@@ -1,6 +1,9 @@
 package com.example.shop.Session2
 
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -26,7 +29,8 @@ import kotlinx.coroutines.launch
 class VerificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVerificationBinding
     private lateinit var supabase: SupabaseClient
-
+    private var isSending = false
+    private lateinit var timer: CountDownTimer
     @OptIn(SupabaseExperimental::class, SupabaseInternal::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,20 +51,57 @@ class VerificationActivity : AppCompatActivity() {
                 Logging { this.level = LogLevel.BODY }
             }
         }
-//        val emailET = intent.getStringExtra("email")
-//        if (emailET != null) {
-//            lifecycleScope.launch {
-//                supabase.auth.resendEmail(OtpType.Email.SIGNUP, emailET)
-//
-//            }
-//
-//        }
+        binding.backIBT.setOnClickListener {
+            onBackPressed()
+        }
+        timer = object : CountDownTimer(60000, 1000){
+            override fun onTick(millisUntilFinished: Long) {
+                val secondsUntilFinished = millisUntilFinished / 1000
+                binding.timer.text = "00:$secondsUntilFinished"
+            }
 
-    }
-    private fun otpCheck() {
-        val one = binding.otp1.text.toString()
-        val two = binding.otp2.text.toString()
-        val three = binding.otp3.text.toString()
-        val four = binding.otp4.text.toString()
+            override fun onFinish() {
+                isSending = false
+                binding.sendAgainTXT.text = "Отправить заново"
+                binding.sendAgainTXT.isClickable = true
+            }
+
+        }
+        timer.start()
+        binding.sendAgainTXT.setOnClickListener {
+            if (!isSending){
+                isSending = true
+                binding.sendAgainTXT.isClickable = false
+                timer.start()
+            }
+        }
+
+        val editTexts = arrayOf(
+            binding.otp1,
+            binding.otp2,
+            binding.otp3,
+            binding.otp4,
+            binding.otp5,
+            binding.otp6)
+        for(i in editTexts.indices){
+            val currentEditText = editTexts[i]
+            currentEditText.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (s?.length == 1 && i < editTexts.lastIndex){
+                        editTexts[i + 1].requestFocus()
+                    }
+                }
+
+            })
+        }
+
     }
 }

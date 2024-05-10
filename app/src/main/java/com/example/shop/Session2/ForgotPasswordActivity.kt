@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -42,6 +43,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
         val supabaseKey =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
+
         // todo создание supabase клиента
         supabase = createSupabaseClient(supabaseUrl = supabaseUrl, supabaseKey = supabaseKey) {
             install(Auth)
@@ -58,18 +60,24 @@ class ForgotPasswordActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showDialog()
                 delay(3000)
-                intent.putExtra("email", binding.emailET.text.toString())
                 try {
-                    val email = binding.emailET.text.toString()
+                    val emailET = binding.emailET.text.toString()
                     lifecycleScope.launch {
-//                        supabase.auth.resetPasswordForEmail(email)
+                        supabase.auth.resendEmail(OtpType.Email.EMAIL_CHANGE, emailET)
+                        runOnUiThread {
+                            Log.e("ForgotPassword", "OTP CODE SEND")
+                        }
+
+                        startActivity(Intent(this@ForgotPasswordActivity, VerificationActivity::class.java))
+                        finish()
                     }
                 } catch (e: Exception){
                     Toast.makeText(this@ForgotPasswordActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Log.e("ForgotPassword", "${e.message}")
+
                 }
 
-                startActivity(Intent(this@ForgotPasswordActivity, VerificationActivity::class.java))
-                finish()
+
             }
         }
 

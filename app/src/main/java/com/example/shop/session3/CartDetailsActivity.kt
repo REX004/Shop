@@ -1,16 +1,20 @@
 package com.example.shop.session3
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shop.R
+import com.example.shop.databinding.ActivityCartDetailsBinding
 import com.example.shop.databinding.HomeActivtyBinding
 import com.example.shop.session3.adapter.CartAdapter
-import com.example.shop.session3.adapter.CategoriesAdapter
+import com.example.shop.session3.adapter.ImagePagerAdapter
+import com.example.shop.session3.adapter.ThnumbailAdapter
 import com.example.shop.session3.data.Cart
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.annotations.SupabaseInternal
@@ -24,8 +28,8 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import kotlinx.coroutines.launch
 
-class HomeActivity : AppCompatActivity() {
-    private lateinit var binding: HomeActivtyBinding
+class CartDetailsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityCartDetailsBinding
     private val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
     private val supabaseKey =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
@@ -34,12 +38,9 @@ class HomeActivity : AppCompatActivity() {
     @OptIn(SupabaseInternal::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = HomeActivtyBinding.inflate(layoutInflater)
+        binding = ActivityCartDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.favoritesBT.setOnClickListener {
-            startActivity(Intent(this, FavoritesCartActivity::class.java))
-        }
         supabase = createSupabaseClient(supabaseUrl = supabaseUrl, supabaseKey = supabaseKey) {
             install(Auth)
             install(Realtime)
@@ -54,26 +55,24 @@ class HomeActivity : AppCompatActivity() {
             try {
                 val city = supabase.from("products").select().decodeList<Cart>()
                 Log.e("HomeActivity","Data loaded")
-                val cartAdapter = CartAdapter(this@HomeActivity, this@HomeActivity, city)
-                binding.cartRV.adapter = cartAdapter
-                binding.cartRV.layoutManager = LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
+                val cartAdapter = ThnumbailAdapter(this@CartDetailsActivity, city)
+                binding.detailsRV.adapter = cartAdapter
+                binding.detailsRV.layoutManager = LinearLayoutManager(this@CartDetailsActivity, LinearLayoutManager.HORIZONTAL, false)
             } catch (e: Exception){
                 showDialog("${e.message}")
             }
         }
+
         lifecycleScope.launch {
             try {
                 val city = supabase.from("products").select().decodeList<Cart>()
-                val categoryAdapter = CategoriesAdapter(this@HomeActivity, city)
-                binding.categoriesRV.adapter = categoryAdapter
-                binding.categoriesRV.layoutManager = LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
+                Log.e("HomeActivity","Data loaded")
+                val cartAdapter = ImagePagerAdapter(this@CartDetailsActivity, city)
+                binding.crossMain.adapter = cartAdapter
             } catch (e: Exception){
                 showDialog("${e.message}")
             }
-
         }
-
-
     }
     private fun showDialog(message: String){
         AlertDialog.Builder(this)
