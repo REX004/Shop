@@ -42,8 +42,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
         val supabaseKey =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
-
+            "SecretKey"
         // todo создание supabase клиента
         supabase = createSupabaseClient(supabaseUrl = supabaseUrl, supabaseKey = supabaseKey) {
             install(Auth)

@@ -31,8 +31,7 @@ class CartFavotiesAdapter(private val context: Context, private val lifecycleOwn
     private val userId = "e426b8c7-95f8-4468-978c-a192d81a35ff"
     private val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
     private val supabaseKey =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
-
+        "SecretKey"
 
     private lateinit var supabase: SupabaseClient
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {

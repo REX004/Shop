@@ -16,7 +16,12 @@ class SwipeToDeleteCallback(private val adapter: MyCartAdapter) :
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        // Здесь вы можете выполнить действие при свайпе влево или вправо
+        val position = viewHolder.adapterPosition
+        if (direction == ItemTouchHelper.LEFT) {
+            adapter.showQuantityControls(position)
+        } else if (direction == ItemTouchHelper.RIGHT) {
+            adapter.showQuantityControls(position)
+        }
     }
 
     override fun onChildDraw(
@@ -29,6 +34,5 @@ class SwipeToDeleteCallback(private val adapter: MyCartAdapter) :
         isCurrentlyActive: Boolean
     ) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-        // Здесь вы можете реализовать анимацию при свайпе
     }
 }

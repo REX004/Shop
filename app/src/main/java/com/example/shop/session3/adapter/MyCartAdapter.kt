@@ -1,5 +1,6 @@
 package com.example.shop.session3.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,7 +37,8 @@ class MyCartAdapter(private val context: Context, private val lifecycleOwner: Li
     private val userId = "e426b8c7-95f8-4468-978c-a192d81a35ff"
     private val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
     private val supabaseKey =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
+        "SecretKey"
+
     private var itemTouchHelper: ItemTouchHelper? = null
 
     fun setItemTouchHelper(itemTouchHelper: ItemTouchHelper) {
@@ -56,11 +58,16 @@ class MyCartAdapter(private val context: Context, private val lifecycleOwner: Li
 
     override fun getItemCount(): Int = carts.size
 
+    fun showQuantityControls(position: Int) {
+        notifyItemChanged(position)
+    }
+    @SuppressLint("ClickableViewAccessibility")
     inner class CartViewHolder(private val binding: ItemMycartBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+
         init {
-            // Установка слушателей на ваш ViewHolder для обработки свайпа
+
             binding.root.setOnTouchListener { _, event ->
                 event?.let {
                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -69,7 +76,9 @@ class MyCartAdapter(private val context: Context, private val lifecycleOwner: Li
                 }
                 false
             }
+
         }
+        @SuppressLint("ClickableViewAccessibility")
         @OptIn(SupabaseInternal::class)
         fun bind(cart: Cart) {
             with(binding) {
@@ -88,6 +97,14 @@ class MyCartAdapter(private val context: Context, private val lifecycleOwner: Li
                     httpConfig {
                         Logging { this.level = LogLevel.BODY }
                     }
+                }
+                root.setOnTouchListener { _, event ->
+                    event?.let {
+                        if (event.action == MotionEvent.ACTION_DOWN) {
+                            itemTouchHelper?.startSwipe(this@CartViewHolder)
+                        }
+                    }
+                    false
                 }
 
             }
