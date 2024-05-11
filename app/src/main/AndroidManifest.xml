@@ -17,9 +17,18 @@
         android:theme="@style/Theme.Shop"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name=".session3.CartDetailsActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".session3.MyCartActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- <activity -->
+        <!-- android:name=".session3.CartDetailsActivity" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".session3.FavoritesCartActivity"
             android:exported="false" />
@@ -46,13 +55,9 @@
 
         </activity>
         <activity
-            android:name=".session3.CartDetailsActivity"
+            android:name=".session3.HomeActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

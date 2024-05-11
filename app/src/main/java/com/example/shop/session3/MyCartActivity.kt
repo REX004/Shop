@@ -1,16 +1,21 @@
 package com.example.shop.session3
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shop.databinding.ActivityFavoritesCartBinding
+import com.example.shop.databinding.ActivityMyCartBinding
 import com.example.shop.databinding.HomeActivtyBinding
-import com.example.shop.session3.adapter.CartFavotiesAdapter
-import com.example.shop.session3.data.Favorite
+import com.example.shop.session3.adapter.CartAdapter
+import com.example.shop.session3.adapter.CategoriesAdapter
+import com.example.shop.session3.adapter.MyCartAdapter
+import com.example.shop.session3.adapter.SwipeToDeleteCallback
+import com.example.shop.session3.data.Cart
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.annotations.SupabaseInternal
 import io.github.jan.supabase.createSupabaseClient
@@ -23,10 +28,8 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import kotlinx.coroutines.launch
 
-class FavoritesCartActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityFavoritesCartBinding
-    private val userId = "e426b8c7-95f8-4468-978c-a192d81a35ff"
-
+class MyCartActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMyCartBinding
     private val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
     private val supabaseKey =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6anltcWtxdmhjdnlrbnJ4ZGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMDYyOTAsImV4cCI6MjAzMDU4MjI5MH0.REeIJC1YhC5t4KQW8F-HZenjFFRxgkhE2VfRv3xAWrY"
@@ -35,12 +38,8 @@ class FavoritesCartActivity : AppCompatActivity() {
     @OptIn(SupabaseInternal::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFavoritesCartBinding.inflate(layoutInflater)
+        binding = ActivityMyCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.backIBT.setOnClickListener {
-            onBackPressed()
-        }
 
 
         supabase = createSupabaseClient(supabaseUrl = supabaseUrl, supabaseKey = supabaseKey) {
@@ -52,25 +51,24 @@ class FavoritesCartActivity : AppCompatActivity() {
                 Logging { this.level = LogLevel.BODY }
             }
         }
-
         lifecycleScope.launch {
             try {
-                val city = supabase.from("favorites").select{
-                    filter {
-                        eq("user_id", userId)
-                    }
-                }
-                    .decodeList<Favorite>()
+                val city = supabase.from("products").select().decodeList<Cart>()
                 Log.e("HomeActivity","Data loaded")
-                val CartFavotiesAdapter = CartFavotiesAdapter(this@FavoritesCartActivity, this@FavoritesCartActivity, city)
-                binding.favouriteRV.adapter = CartFavotiesAdapter
-                binding.favouriteRV.layoutManager = GridLayoutManager(this@FavoritesCartActivity, 2)
+                val cartAdapter = MyCartAdapter(this@MyCartActivity, this@MyCartActivity, city)
+                binding.cartRV.adapter = cartAdapter
+                binding.cartRV.layoutManager = LinearLayoutManager(this@MyCartActivity, LinearLayoutManager.VERTICAL, false)
+
+                val swipeToDeleteCallback = SwipeToDeleteCallback(cartAdapter)
+                val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+                itemTouchHelper.attachToRecyclerView(binding.cartRV)
+                cartAdapter.setItemTouchHelper(itemTouchHelper)
             } catch (e: Exception){
                 showDialog("${e.message}")
-                Log.e("HomeActivity","Data: ${e.message}")
-
             }
         }
+
+
     }
     private fun showDialog(message: String){
         AlertDialog.Builder(this)
