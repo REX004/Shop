@@ -41,6 +41,7 @@ class MyCartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMyCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //
 
         lifecycleScope.launch {
             delay(2000)
