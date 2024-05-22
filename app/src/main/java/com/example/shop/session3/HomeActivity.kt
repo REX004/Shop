@@ -37,6 +37,28 @@ class HomeActivity : AppCompatActivity() {
         binding = HomeActivtyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.menuButton.setOnClickListener {
+            binding.mainContainer.radius = 32f
+            binding.mainContainer.pivotX = ((binding.mainContainer.width / 2).toFloat())
+            binding.mainContainer.pivotY = ((binding.mainContainer.height / 2).toFloat())
+            binding.mainContainer.scaleX = 0.71f
+            binding.mainContainer.scaleY = 0.71f
+            binding.mainContainer.translationX = 320f
+            binding.mainContainer.rotation = -4f
+
+            binding.mainContainer.setOnClickListener {
+                binding.mainContainer.radius = 0f
+                binding.mainContainer.pivotX = 0f
+                binding.mainContainer.pivotY = 0f
+                binding.mainContainer.scaleX = 1f
+                binding.mainContainer.scaleY = 1f
+                binding.mainContainer.translationX = 0f
+                binding.mainContainer.rotation = 0f
+
+                binding.mainContainer.setOnClickListener(null)
+            }
+        }
+
         binding.favoritesBT.setOnClickListener {
             startActivity(Intent(this, FavoritesCartActivity::class.java))
         }
@@ -73,7 +95,16 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
+        val shoes = listOf(
+            Shoe(2),
+            Shoe(4),
+            Shoe(2),
+            Shoe(5),
+        )
 
+        shoes.sortedByDescending { it.rating }.take(2)
+
+        println(shoes.map { it.category })
     }
     private fun showDialog(message: String){
         AlertDialog.Builder(this)
@@ -85,3 +116,7 @@ class HomeActivity : AppCompatActivity() {
             .show()
     }
 }
+
+data class Shoe(
+    val rating: Int
+)

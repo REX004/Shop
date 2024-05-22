@@ -23,11 +23,12 @@ import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.storage.Storage
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.util.Identity.decode
 import kotlinx.coroutines.launch
 
 
-class CartAdapter(private val context: Context, private val lifecycleOwner: LifecycleOwner, private val carts: List<Cart>) :
+class CartAdapter(private val context: Context,
+                  private val lifecycleOwner: LifecycleOwner,
+                  private val carts: List<Cart>) :
     RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
         private val userId = "e426b8c7-95f8-4468-978c-a192d81a35ff"
     private val supabaseUrl = "https://yzjymqkqvhcvyknrxdgk.supabase.co"
@@ -174,7 +175,12 @@ class CartAdapter(private val context: Context, private val lifecycleOwner: Life
 
 
 
-
+                        val shoe = Shoes(1)
+                        if (DataManager.favorite.contains(shoe)){
+                            DataManager.favorite.remove(shoe)
+                        } else {
+                            DataManager.favorite.add(shoe)
+                        }
                     }
                 }
             }
@@ -182,4 +188,11 @@ class CartAdapter(private val context: Context, private val lifecycleOwner: Life
 
     }
 
+}
+
+data class Shoes(
+    val id: Int
+)
+object DataManager {
+    var favorite: MutableList<Shoes> = mutableListOf()
 }

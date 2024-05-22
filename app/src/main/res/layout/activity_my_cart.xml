@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F9"
     android:statusBarColor = "#F7F7F9"
     android:orientation="vertical">
+
+    <ImageView
+        android:layout_margin="26dp"
+        android:id="@+id/barcodeImage"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginTop="10dp"
@@ -39,7 +46,6 @@
         android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
 
         android:orientation="vertical">
         <TextView
@@ -53,10 +59,11 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="5dp"
+            android:id="@+id/cartRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/cartRV"/>
+            android:layout_marginStart="21dp"
+            android:layout_marginTop="5dp" />
 
     </LinearLayout>
 
