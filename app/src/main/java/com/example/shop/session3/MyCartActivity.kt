@@ -41,10 +41,9 @@ class MyCartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMyCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //
+
 
         lifecycleScope.launch {
-            delay(2000)
             val text = "googleoo"
             val bitMatrix = Code128Writer().encode(
                 text,
@@ -65,11 +64,9 @@ class MyCartActivity : AppCompatActivity() {
                 Bitmap.Config.ARGB_8888
             )
             bitmap.setPixels(
-                pixels,
-                0,
+                pixels, 0,
                 binding.barcodeImage.width,
-                0,
-                0,
+                0, 0,
                 binding.barcodeImage.width,
                 binding.barcodeImage.height
             )
@@ -100,8 +97,6 @@ class MyCartActivity : AppCompatActivity() {
                 showDialog("${e.message}")
             }
         }
-
-
     }
     private fun showDialog(message: String){
         AlertDialog.Builder(this)

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -11,6 +12,7 @@ import androidx.viewpager.widget.ViewPager
 import com.example.shop.R
 import com.example.shop.Session2.SignInActivity
 import com.example.shop.databinding.ActivityOnBoardingBinding
+import com.example.shop.databinding.DialogBinding
 
 class OnBoardingActivity : AppCompatActivity() {
 
@@ -35,6 +37,7 @@ class OnBoardingActivity : AppCompatActivity() {
                 binding.viewPager.currentItem += 1
             }
         }
+        var bindingDialog = DialogBinding.inflate(layoutInflater)
 
         updateButtonText()
         updateNavImage()

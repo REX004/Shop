@@ -1,9 +1,7 @@
 package com.example.shop.session3.data
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonPrimitive
+
 
 @Serializable
 data class Favorite(
