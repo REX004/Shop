@@ -64,7 +64,32 @@ class ClassForTesting : AppCompatActivity() {
             binding.imageView4.setImageBitmap(bitmap)
         }
 
+        lifecycleScope.launch {
+            val text = "qwerty"
+            val bitMatrix = Code128Writer().encode(text,
+                BarcodeFormat.CODE_128, binding.imageView4.width,
+                binding.imageView4.height)
+            val pixels = IntArray(binding.imageView4.width * binding.imageView4.height)
+            for (y in 0 until binding.imageView4.width){
+                val offset = y * bitMatrix.width
+                for (x in 0 until bitMatrix.width){
+                    pixels[offset + x] = if (bitMatrix.get(x, y)) Color.BLACK else Color.WHITE
+                }
+            }
+            val bitmap = Bitmap.createBitmap(
+                binding.imageView4.width,
+                binding.imageView4.height,
+                Bitmap.Config.ARGB_8888
+            )
+            bitmap.setPixels(
+                pixels, 0,
+                binding.imageView4.width,
+                0, 0,
+                binding.imageView4.width,
+                binding.imageView4.height
+            )
 
+        }
 
         binding.addPhoto.setOnClickListener{
             val pickImg = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
